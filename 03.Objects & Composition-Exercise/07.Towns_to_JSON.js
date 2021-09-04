@@ -5,7 +5,7 @@ function solve(arr) {
         acc[titles[i]] = el;
         return acc
     }, {}))
-    
+
     return JSON.stringify(row);
 
     function extractElements(str) {
