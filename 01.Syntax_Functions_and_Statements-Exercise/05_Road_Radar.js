@@ -2,10 +2,10 @@ function solve(speed, area) {
     speed = Number(speed);
 
     let actions = {
-        "motorway"   : motorway,
-        "interstate" : interstate,
-        "city"       : city,
-        "residential": residential
+        motorway,
+        interstate,
+        city,
+        residential
     }
 
     let action = actions[area];
