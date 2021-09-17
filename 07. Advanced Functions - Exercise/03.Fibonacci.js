@@ -1,11 +1,12 @@
 function getFibonator() {
     let prev = 0;
     let curr = 1;
+    
     function solve(){
         let next = prev + curr;
         prev = curr;
         curr = next;
-        return curr
+        return prev
     }
     return solve;
 }
