@@ -26,7 +26,7 @@ function solve(httpObj) {
 
     function validateVersion(){
         let propName      = 'version';
-        let validateArr = ['HTTP/0.9', 'HTTP/1.0', 'HTTP/1.1', ' HTTP/2.0 '];
+        let validateArr = ['HTTP/0.9', 'HTTP/1.0', 'HTTP/1.1', 'HTTP/2.0'];
         if(httpObj[propName] === undefined || !validateArr.includes(httpObj[propName])){
             throw new Error('Invalid request header: Invalid Version')
         } 
@@ -43,10 +43,9 @@ function solve(httpObj) {
 }
 try{
     console.log(solve({
-        method: 'GET',
-        uri: 'svn.public.catalog',
-        version: 'HTTP/1.1',
-        message: ''
+        method: 'POST',
+        uri: 'home.bash',
+        version: 'HTTP/2.0'
       }));
 }catch(e){
     console.log(e.message);
