@@ -10,8 +10,8 @@ describe('mathEnforcer', () => {
             assert.strictEqual(mathEnforcer.addFive(null), undefined);
     
             assert.strictEqual(mathEnforcer.addFive(5), 10);
-            assert.strictEqual(mathEnforcer.addFive(-3), 2);
             assert.strictEqual(mathEnforcer.addFive(-7), -2);
+            assert.strictEqual(mathEnforcer.addFive(1.1), 6.1, 0.01);
         })
     })
 
@@ -23,8 +23,8 @@ describe('mathEnforcer', () => {
             assert.strictEqual(mathEnforcer.subtractTen(null), undefined);
     
             assert.strictEqual(mathEnforcer.subtractTen(15), 5);
-            assert.strictEqual(mathEnforcer.subtractTen(30), 20);
             assert.strictEqual(mathEnforcer.subtractTen(-30), -40);
+            assert.strictEqual(mathEnforcer.subtractTen(5.1), -4.9, 0.01);
         })
     })
 
@@ -39,7 +39,7 @@ describe('mathEnforcer', () => {
             assert.strictEqual(mathEnforcer.sum(5.5, 5.5), 11);
             assert.strictEqual(mathEnforcer.sum(50, 10), 60);
             assert.strictEqual(mathEnforcer.sum(-5, -5), -10);
-            assert.closeTo(mathEnforcer.sum(1.5, 1), 0.01, 2.5);
+            assert.closeTo(mathEnforcer.sum(1.5, 1), 2.5, 0.01);
       
         })
     })
