@@ -12,7 +12,7 @@ function solve(arr) {
             fruitCollection[fruit] += qty;
         }
 
-        if(fruitCollection[fruit] > 1000){
+        if(fruitCollection[fruit] >= 1000){
             let bottle = Math.trunc(fruitCollection[fruit] / 1000);
             let float  = fruitCollection[fruit] % 1000;
     
