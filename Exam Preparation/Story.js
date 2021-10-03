@@ -36,8 +36,35 @@ class Story {
         return `${username} disliked ${this.title}`
     }
 
-    comment(username, content, id){
+    
+    comment(username, content, id) {
         
+        let comment = {
+            Id: id,
+            Username: username,
+            Content: content,
+            Replies: [],
+        };
+ 
+        let commentWithId = this._comments.find(c => c.Id === id);
+ 
+        if (commentWithId) {
+            let replyID = Number(commentWithId.Id + '.' + (commentWithId.Replies.length + 1));
+            let reply = {
+                Id: replyID,
+                Username: username,
+                Content: content,
+            };
+ 
+            commentWithId.Replies.push(reply);
+ 
+            return 'You replied successfully';
+        }
+ 
+        comment.Id = this._comments.length + 1;
+        this._comments.push(comment);
+ 
+        return `${username} commented on ${this.title}`;
     }
 }
 let art = new Story("My Story", "Anny");
@@ -51,7 +78,7 @@ art.comment("Zane", "Reply", 1);
 art.comment("Jessy", "Nice :)");
 console.log(art.comment("SAmmy", "Reply@", 1));
 console.log()
-console.log(art.toString('username'));
-console.log()
-art.like("Zane");
-console.log(art.toString('desc'));
+// console.log(art.toString('username'));
+// console.log()
+// art.like("Zane");
+// console.log(art.toString('desc'));
