@@ -1,12 +1,17 @@
-function solve(arr) {
+function rectangle(width, height, color) {
     
+    return {
+        width,
+        height,
+        color: color[0].toUpperCase() + color.slice(1),
+        calcArea: function () {
+            return Number(this.width * this.height);
+        }
+    }
 }
-console.log(solve(['| Town | Latitude | Longitude |',
-    '| Sofia | 42.696552 | 23.32601 |',
-    '| Beijing | 39.913818 | 116.363625 |'
-]));
 
-console.log((solve(['| Town | Latitude | Longitude |',
-'| Veliko Turnovo | 43.0757 | 25.6172 |',
-'| Monatevideo | 34.50 | 56.11 |']
-)));
+let rect = rectangle(4, 5, 'red');
+console.log(rect.width);
+console.log(rect.height);
+console.log(rect.color);
+console.log(rect.calcArea());
