@@ -61,8 +61,6 @@ function solve() {
 
             liElement.appendChild(deleteButton);
             archiveUl.appendChild(liElement);
-        }
-
-        
+        } 
     }
 }
