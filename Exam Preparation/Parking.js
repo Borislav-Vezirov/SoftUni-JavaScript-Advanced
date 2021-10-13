@@ -22,7 +22,7 @@ class Parking{
         if(currentCar.payed == false){
             throw new Error(`${currentCar.carNumber} needs to pay before leaving the parking lot.`)
         }
-        this.vehicles = this.vehicles.filter(x => x.carNumber !== currentCar.carNumber);
+        this.vehicles = this.vehicles.filter(x => x.carNumber !== carNumber);
         return `${currentCar.carNumber} left the parking lot.`
     }
 
@@ -45,7 +45,9 @@ class Parking{
 
         let result = '';
 
-        if(carNumber === undefined){
+        let currentCar = this.findCar(carNumber);
+
+        if(currentCar.carNumber === undefined){
 
             result += `The Parking Lot has ${this.capacity - this.vehicles.length} empty spots left.\n`
 
@@ -58,7 +60,6 @@ class Parking{
             });
             return result;
         }
-        let currentCar = this.findCar(carNumber);
         return `${currentCar.carModel} == ${currentCar.carNumber} - ${currentCar.payed === true ? 'Has payed' : 'Not payed'}`
     }
 

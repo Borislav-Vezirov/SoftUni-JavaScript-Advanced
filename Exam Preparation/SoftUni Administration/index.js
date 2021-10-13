@@ -1,83 +1,116 @@
 function solve() {
-    let buttonElement = document.querySelector('.form-control button')
 
-    let inputNameElement = document.querySelector('input[name=lecture-name]')
-    let inputDateElement = document.querySelector('input[name=lecture-date]')
-    let selectModuleElement = document.querySelector('select[name=lecture-module]')
+    let [getLectureNameEl, getDateEl] = Array.from(document.querySelectorAll('input'));
 
-    let selectTrainingsArea = document.querySelector('.modules');
+    let getSelectModuleEl = document.querySelector('select');
 
+    let submitButton = document.querySelector('.form-control button');
 
-    let lectures = {};
+    let getTrainingsModulesEl = document.querySelector('.modules');
 
-    buttonElement.addEventListener('click', (e) => {
+    submitButton.addEventListener('click', (e) => {
         e.preventDefault();
 
-        if (!inputNameElement.value || !inputDateElement.value || selectModuleElement.value === 'Select module') {
-            return;
-        }
+        if(getLectureNameEl.value !== '' &&
+           getDateEl.value !== '' &&
+           getSelectModuleEl.value !== 'Select module'){
 
-        if (!lectures[selectModuleElement.value]) {
+                let getExistingModules = Array.from(getTrainingsModulesEl.querySelectorAll('h3'));
 
-            lectures[selectModuleElement.value] = [];
-            createModule();
-            createLecture();
-        } else {
-            createLecture();
-        }
+                let isModuleExist = getExistingModules
+                .find(x => x.textContent === `${(getSelectModuleEl.value).toUpperCase()}-MODULE`);
+
+                let createDiv;
+                let createH3Tag;
+                let createUlElement;
+
+                if(!isModuleExist){
+
+                    createDiv = document.createElement('div');
+                    createDiv.className = 'module';
+    
+                    createH3Tag = document.createElement('h3');
+                    createH3Tag.textContent = `${(getSelectModuleEl.value).toUpperCase()}-MODULE`;
+
+                    createUlElement = document.createElement('ul');
+
+                    //createLecture();
+                    createDiv.appendChild(createH3Tag);
+                    createDiv.appendChild(createUlElement);
+                    createUlElement.appendChild(createLecture());
+
+                    getTrainingsModulesEl.appendChild(createDiv);
+
+                }else{
+                    let getModules = isModuleExist.parentElement;
+                    let getUi = isModuleExist.nextElementSibling;
+
+                    getUi.appendChild(createLecture());
+
+                    let getH4Elements = Array.from(getModules.querySelectorAll('h4'));
+                    sort(getH4Elements);
+                    
+                    let getLiElements = Array.from(getModules.querySelectorAll('li'));
+                    for (const li of getLiElements) {
+                        li.prepend(getH4Elements.shift());
+                    }
+                }
+           }
     })
 
-    function createModule() {
-        let createDivModule = document.createElement('div');
-        createDivModule.classList.add('module');
+    function createLecture(){
 
-        let createH3Tag = document.createElement('h3');
-        createH3Tag.textContent = (`${selectModuleElement.value}-module`).toUpperCase();
-        createDivModule.appendChild(createH3Tag);
-
-        return selectTrainingsArea.appendChild(createDivModule);
-    }
-
-    function createLecture() {
-
-        lectures[selectModuleElement.value].push({
-            name: inputNameElement.value,
-            date: inputDateElement.value
-        });
-
-        let getModule = document.querySelector('.module:last-child');
-
-        let createUlList = document.createElement('ul');
-
-        // let createLiElement = document.createElement('li');
-        // createLiElement.classList.add('flex');
-
-        let [year, month, day, hour] = inputDateElement.value.split(/[-|T]/g);
+        let createLiElement = document.createElement('li');
+        createLiElement.className = 'flex';
 
         let createH4Element = document.createElement('h4');
-        createH4Element.textContent = `${inputNameElement.value} - ${year}/${month}/${day} - ${hour}`
-        let createDelButton = document.createElement('button');
-        createDelButton.classList.add('red');
-        createDelButton.textContent = 'Del'
-        let sorted = Array.from(document.querySelectorAll('h4')).sort((a, b) => {
-            let first = a.textContent.split(/[a-zA-Z - ]/g).filter(x => x !== '')[1];
-            let secon = b.textContent.split(/[a-zA-Z - ]/g).filter(x => x !== '')[1];
-            return first.localeCompare(secon);
-        });
-        sorted.forEach(x => {
-            let liElement = document.createElement('li');
-            liElement.classList.add('flex');
-            liElement.appendChild(x);
-            liElement.appendChild(createDelButton);
-            return createUlList.appendChild(liElement);
-        });
-
-        // createLiElement.appendChild(createH4Element)
-        // createLiElement.appendChild(createDelButton);
-
         
+        createH4Element.textContent = `${getLectureNameEl.value} - ${refactorDate(getDateEl.value)}`;
 
-        return getModule.appendChild(createUlList);
+        let createDelButton = document.createElement('button');
+        createDelButton.className   = 'red';
+        createDelButton.textContent = 'Del';
+
+        createDelButton.addEventListener('click', deleteFunction)
+
+        createLiElement.appendChild(createH4Element);
+        createLiElement.appendChild(createDelButton);
+        
+        return createLiElement;
     }
 
+    function deleteFunction(e){
+
+        let getLiList = e.target.parentElement;
+        let getUlList = e.target.parentElement.parentElement;
+        let getModule = e.target.parentElement.parentElement.parentElement;
+
+        getLiList.remove();
+
+        if(getUlList.children.length === 0){
+            getModule.remove();
+        }
+    }
+
+    function sort(arr){
+
+        arr.sort((a, b) => {
+            let first  = a.textContent.split(/^[\w]+ - /);
+            let second = b.textContent.split(/^[\w]+ - /);
+
+            return first[1].localeCompare(second[1]);
+        })
+        return arr
+    }
+
+    function refactorDate(value){
+
+        let result = value
+        .split('-')
+        .join('/')
+        .split('T')
+        .join(' - ');
+        
+        return result
+    }
 };

@@ -38,7 +38,6 @@ class Story {
 
     
     comment(username, content, id) {
-        
         let comment = {
             Id: id,
             Username: username,
@@ -67,6 +66,7 @@ class Story {
         return `${username} commented on ${this.title}`;
     }
 }
+
 let art = new Story("My Story", "Anny");
 art.like("John");
 console.log(art.likes);
@@ -78,7 +78,7 @@ art.comment("Zane", "Reply", 1);
 art.comment("Jessy", "Nice :)");
 console.log(art.comment("SAmmy", "Reply@", 1));
 console.log()
-// console.log(art.toString('username'));
-// console.log()
-// art.like("Zane");
-// console.log(art.toString('desc'));
+console.log(art.toString('username'));
+console.log()
+art.like("Zane");
+console.log(art.toString('desc'));
