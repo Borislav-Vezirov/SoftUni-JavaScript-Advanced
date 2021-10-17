@@ -50,25 +50,19 @@ function solveClasses() {
         
         constructor( firstName, lastName, bonus, experience ){
             super(firstName, lastName)
-            // this.firstName  = firstName;
-            // this.lastName   = lastName;
             this.baseSalary = 1000 + Number(bonus)
-            // this.tasks      = [];
             this.experience = experience
         }
 
         learn(years){
-
+            this.experience += Number(years);
         }
     }
 
     class Senior extends Developer{
         constructor( firstName, lastName, bonus, experience ){
             super(firstName, lastName)
-            // this.firstName  = firstName;
-            // this.lastName   = lastName;
             this.baseSalary = 1000 + Number(bonus)
-            // this.tasks      = [];
             this.experience = experience + 5
         }
 
