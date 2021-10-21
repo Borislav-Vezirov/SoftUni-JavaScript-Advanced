@@ -12,93 +12,85 @@ function solve() {
 
     let getTotalProfit = document.querySelector('.total-price');
 
-    getButton.addEventListener('click', (e) => {
+    getButton.addEventListener('click', addRow);
+
+    function addRow(e){
         e.preventDefault();
 
-        if (getModelInput.value !== '' && getDescriptionInput.value !== '' &&
-            getYearInput.value > 0 && getPriceInput.value > 0) {
+        if(getModelInput.value == '' || getDescriptionInput.value == '' ||
+           getYearInput.value == isNaN(Number(getYearInput.value)) || 
+           getYearInput.value <= 0 || getPriceInput.value == isNaN(Number(getPriceInput.value)) ||
+           getPriceInput.value <= 0) {
+               return;
+           }
 
-            //--------------------Create Info Row------------------------------------------------------------
-            let createInfoRow = document.createElement('tr');
-            createInfoRow.classList.add('info');
+        let moreBtn = el('button', {classList: 'moreBtn'}, 'More Info');
 
-            let createModelTd = document.createElement('td');
-            createModelTd.textContent = getModelInput.value;
+        let buyBtn  = el('button', {classList: 'buyBtn'}, 'Buy it');
 
-            let createPriceTd = document.createElement('td');
-            createPriceTd.textContent = (Number(getPriceInput.value)).toFixed(2);
+        let price = el('td', {}, Number(getPriceInput.value).toFixed(2));
 
-            let createButtonTd = document.createElement('td');
+        let createTrInfoEl = el('tr', {classList: 'info'}, el('td', {}, getModelInput.value), 
+                                                           price,
+                                                           el('td', {}, moreBtn, buyBtn)
+                             );
 
-            let createMoreBtn = document.createElement('button');
-            createMoreBtn.classList.add('moreBtn')
-            createMoreBtn.textContent = 'More Info'
+        let descrTd = el('td', {colspan: '3'}, `Description: ${getDescriptionInput.value}`)
+        descrTd.setAttribute('colspan', '3');
 
-            createMoreBtn.addEventListener('click', moreInfoFunc)
+        let createTrHideEl = el('tr', {classList: 'hide'}, el('td', {}, `Year: ${getYearInput.value}`));
+        createTrHideEl.appendChild(descrTd);
 
-            let createBuyBtn = document.createElement('button');
-            createBuyBtn.classList.add('buyBtn');
-            createBuyBtn.textContent = 'Buy It';
+        getTBody.appendChild(createTrInfoEl);
+        getTBody.appendChild(createTrHideEl);
 
-            createBuyBtn.addEventListener('click', buyItFunc)
+        moreBtn.addEventListener('click', showInfo.bind(null, moreBtn, createTrHideEl));
+        buyBtn.addEventListener('click', buyIt.bind(null, createTrInfoEl, createTrHideEl, price));
 
-            createButtonTd.appendChild(createMoreBtn);
-            createButtonTd.appendChild(createBuyBtn);
+        document.querySelector('form').reset();
+    }
 
-            createInfoRow.appendChild(createModelTd);
-            createInfoRow.appendChild(createPriceTd);
-            createInfoRow.appendChild(createButtonTd);
-            //-------------------------Create Hided Info---------------------------------------------------
-            let createHideRow = document.createElement('tr');
-            createHideRow.classList.add('hide');
+    function showInfo(moreBtn, createTrHideEl){
 
-            let createYearTd = document.createElement('td');
-            createYearTd.textContent = `Year: ${getYearInput.value}`;
+        
+        if(moreBtn.textContent == 'More Info'){
+            moreBtn.textContent = 'Less Info';
+            createTrHideEl.style.display = 'contents'
+        }else{
+            moreBtn.textContent = 'More Info';
+            createTrHideEl.style.display = 'none'
+        }
+    }
 
-            let createDescrTd = document.createElement('td');
-            createDescrTd.setAttribute('colspan', '3');
-            createDescrTd.textContent = `Description: ${getDescriptionInput.value}`;
-
-            createHideRow.appendChild(createYearTd);
-            createHideRow.appendChild(createDescrTd);
-            //--------------------Add Rows To TBody---------------------------------------------------------
-
-            getTBody.appendChild(createInfoRow);
-            getTBody.appendChild(createHideRow);
-
-            getModelInput.value = ''
-            getYearInput.value = ''
-            getPriceInput.value = ''
-            getDescriptionInput.value = ''
+    function buyIt(createTrInfoEl, createTrHideEl, price){
+        
+        if(getTotalProfit.textContent == '0.00'){
+            getTotalProfit.textContent = (Number(price.textContent)).toFixed(2);
+        }else{
+            getTotalProfit.textContent = (Number(getTotalProfit.textContent) + Number(price.textContent)).toFixed(2)
         }
 
-        function moreInfoFunc(e) {
+        createTrHideEl.remove();
+        createTrInfoEl.remove();
+    }
 
-            let getInfoButton = e.target;
+    function el(type, attr, ...content){
+        
+        let element = document.createElement(type);
 
-            let getHidenTr = e.target.parentElement.parentElement.nextElementSibling
+        for (const key in attr) {
+            element[key] = attr[key];
+        }
 
-            if (getInfoButton.textContent === 'More Info') {
-                getInfoButton.textContent = 'Less Info'
-                getHidenTr.style.display = 'contents';
+        for (let item of content) {
 
-            } else {
-                getInfoButton.textContent = 'More Info'
-                getHidenTr.style.display = 'none';
+            if(typeof item == 'string' || typeof item == 'number'){
+                item = document.createTextNode(item)
             }
+            element.appendChild(item);
         }
 
-        function buyItFunc(e) {
-
-            let getPrice = e.currentTarget.parentElement.parentElement.children[1];
-
-            if (getTotalProfit.textContent == 0.00) {
-                getTotalProfit.textContent = (Number(getPrice.textContent)).toFixed(2);
-            } else {
-                getTotalProfit.textContent = (Number(getTotalProfit.textContent) + Number(getPrice.textContent)).toFixed(2);
-            }
-            e.currentTarget.parentElement.parentElement.remove();
-        }
-    })
+        return element;
+    }
 }
 

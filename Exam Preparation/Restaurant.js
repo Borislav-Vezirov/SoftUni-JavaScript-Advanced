@@ -8,7 +8,7 @@ class Restaurant{
 
     loadProducts(products){
 
-        for (const el of products) {
+        for (let el of products) {
             let [productName, productQuantity, productTotalPrice] = el.split(' ');
             productQuantity   = Number(productQuantity);
             productTotalPrice = Number(productTotalPrice);
@@ -60,15 +60,15 @@ class Restaurant{
 
     showTheMenu(){
 
-        let result = '';
-        for (const key in this.menu) {
-            result += `${key} - $ ${this.menu[key].price}\n`;
+        let result = [];
+        for (let key in this.menu) {
+            result.push(`${key} - $ ${this.menu[key].price}\n`);
         }
 
         if(result.length === 0){
             return `Our menu is not ready yet, please come later...`
         }else{
-            return result;
+            return result.join('\n');
         }
     }
 
@@ -88,7 +88,7 @@ class Restaurant{
             }
         }
 
-        for (const el of productsArr) {
+        for (let el of productsArr) {
             el[1] = Number(el[1]);
             this.stockProducts[el[0]] -= el[1];
             this.budgetMoney += this.menu[meal].price;
@@ -101,4 +101,8 @@ let kitchen = new Restaurant(1000);
 kitchen.loadProducts(['Yogurt 30 3', 'Honey 50 4', 'Strawberries 20 10', 'Banana 5 1']);
 kitchen.addToMenu('frozenYogurt', ['Yogurt 1', 'Honey 1', 'Banana 1', 'Strawberries 10'], 9.99);
 console.log(kitchen.makeTheOrder('frozenYogurt'));
+
+
+
+
 
